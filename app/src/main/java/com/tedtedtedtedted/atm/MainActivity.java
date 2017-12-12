@@ -17,16 +17,22 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     boolean logon =false;
-    public static final int FUNC_LOGIN =1;
+    public static final int REQUEST_LOGIN =1;
+    public static final int REQUEST_USERINFO =2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
+
         if(!logon){
          Intent intent =new Intent(this,LoginActivity.class);
             startActivity(intent);
-            startActivityForResult(intent,FUNC_LOGIN);
+            startActivityForResult(intent,REQUEST_LOGIN);
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -34,7 +40,11 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
+
+
             public void onClick(View view) {
+                setContentView(R.layout.activity_user_info);
+
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -44,15 +54,41 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,  resultCode,  data);
-        if(requestCode==FUNC_LOGIN){
+        switch(requestCode){
+        case REQUEST_LOGIN:
             if(resultCode==RESULT_OK){
-                String uid = data.getStringExtra("LOGIN_USERID");
+                String userid = data.getStringExtra("EXTRA_USERID");
                 String pw = data.getStringExtra("LOGIN_PASSWD");
-                Log.d("RESULT",uid+"/"+pw);
+                Toast.makeText(this,"Login userid:"+userid,Toast.LENGTH_LONG).show();
+                getSharedPreferences("atm",MODE_PRIVATE)
+                        .edit()
+                        .putString("USERID",userid)
+                        .apply();
             }
             else{
                 finish();
             }
+            break;
+
+
+            case REQUEST_USERINFO:
+                if(resultCode==RESULT_OK){
+                    String nickname = data.getStringExtra("EXTRA_NICKNAME");
+                    String phone = data.getStringExtra("EXTRA_PHONE");
+
+                    Toast.makeText(this,"Nickname:"+nickname,Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"Phone:"+phone,Toast.LENGTH_LONG).show();
+
+
+            }
+           break;
+
+
+
+
+
+
+
         }
     }
 
