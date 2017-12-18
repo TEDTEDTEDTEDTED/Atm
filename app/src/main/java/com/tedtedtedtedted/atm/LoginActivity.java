@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
                     .commit();
 
 
+
             Toast.makeText(this, "登入成功", Toast.LENGTH_LONG).show();
             getIntent().putExtra("EXTRA_USERID",uid);
             getIntent().putExtra("LOGIN_PASSWD",pw);

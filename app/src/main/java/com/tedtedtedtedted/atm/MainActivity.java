@@ -1,6 +1,7 @@
 package com.tedtedtedtedted.atm;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,8 +18,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     boolean logon =false;
-    public static final int REQUEST_LOGIN =1;
     public static final int REQUEST_USERINFO =2;
+    public static final int REQUEST_LOGIN =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +28,22 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
         if(!logon){
-         Intent intent =new Intent(this,LoginActivity.class);
-            startActivity(intent);
+            Intent intent =new Intent(this,LoginActivity.class);
+            //startActivity(intent);
             startActivityForResult(intent,REQUEST_LOGIN);
+        }
+        else{
+            Intent intent =new Intent(this,UserInfoActivity.class);
+            //startActivity(intent);
+            startActivityForResult(intent,REQUEST_USERINFO);
+
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
 
@@ -45,11 +51,33 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 setContentView(R.layout.activity_user_info);
 
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                Snackbar.make(view, "想要顯示的字串", Snackbar.LENGTH_LONG)
+                        .setAction("Action", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                            }
+                        }).setActionTextColor(Color.YELLOW).show();
             }
         });
     }
+
+    public void ok(View v) {
+
+        EditText edNickname = (EditText) findViewById(R.id.user_nickname);
+        EditText edPhone = (EditText) findViewById(R.id.user_phone);
+        String nickname = edNickname.getText().toString();
+        String phone = edPhone.getText().toString();
+        getIntent().putExtra("EXTRA_NICKNAME", nickname);
+        getIntent().putExtra("EXTRA_phone", phone);
+        setResult(RESULT_OK, getIntent());
+        Toast.makeText(this,"Nickname:"+nickname, Toast.LENGTH_LONG).show();
+        finish();
+
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -64,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
                         .edit()
                         .putString("USERID",userid)
                         .apply();
+                logon =true;
+                Toast.makeText(this,"logon"+logon,Toast.LENGTH_LONG).show();
+
             }
             else{
                 finish();
@@ -81,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
+
            break;
 
 
