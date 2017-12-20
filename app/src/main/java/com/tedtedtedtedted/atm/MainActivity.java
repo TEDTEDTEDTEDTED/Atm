@@ -33,12 +33,7 @@ public class MainActivity extends AppCompatActivity {
             //startActivity(intent);
             startActivityForResult(intent,REQUEST_LOGIN);
         }
-        else{
-            Intent intent =new Intent(this,UserInfoActivity.class);
-            //startActivity(intent);
-            startActivityForResult(intent,REQUEST_USERINFO);
 
-        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -49,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
 
             public void onClick(View view) {
-                setContentView(R.layout.activity_user_info);
-
+                Intent userinfolayout = new Intent(MainActivity.this, UserInfoActivity.class);
+                startActivityForResult(userinfolayout,REQUEST_USERINFO);
 
                 Snackbar.make(view, "想要顯示的字串", Snackbar.LENGTH_LONG)
                         .setAction("Action", new View.OnClickListener() {
@@ -63,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void ok(View v) {
+   /* public void ok(View v) {
 
         EditText edNickname = (EditText) findViewById(R.id.user_nickname);
         EditText edPhone = (EditText) findViewById(R.id.user_phone);
@@ -75,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this,"Nickname:"+nickname, Toast.LENGTH_LONG).show();
         finish();
 
-    }
+    }*/
 
 
 
@@ -85,15 +80,16 @@ public class MainActivity extends AppCompatActivity {
         switch(requestCode){
         case REQUEST_LOGIN:
             if(resultCode==RESULT_OK){
-                String userid = data.getStringExtra("EXTRA_USERID");
+                String uid = data.getStringExtra("EXTRA_USERID");
                 String pw = data.getStringExtra("LOGIN_PASSWD");
-                Toast.makeText(this,"Login userid:"+userid,Toast.LENGTH_LONG).show();
+                Log.d("RESULT", uid + "/////////" + pw);
+                Toast.makeText(this,"Login uid:::::"+uid,Toast.LENGTH_LONG).show();
                 getSharedPreferences("atm",MODE_PRIVATE)
                         .edit()
-                        .putString("USERID",userid)
+                        .putString("USERID",uid)
                         .apply();
-                logon =true;
-                Toast.makeText(this,"logon"+logon,Toast.LENGTH_LONG).show();
+               // logon =true;
+                Toast.makeText(this,"logon:::::::::::"+logon,Toast.LENGTH_LONG).show();
 
             }
             else{
@@ -107,12 +103,18 @@ public class MainActivity extends AppCompatActivity {
                     String nickname = data.getStringExtra("EXTRA_NICKNAME");
                     String phone = data.getStringExtra("EXTRA_PHONE");
 
-                    Toast.makeText(this,"Nickname:"+nickname,Toast.LENGTH_LONG).show();
-                    Toast.makeText(this,"Phone:"+phone,Toast.LENGTH_LONG).show();
-
-
+                    Toast.makeText(this,"Nickname:::::"+nickname,Toast.LENGTH_LONG).show();
+                    Toast.makeText(this,"Phone::::::"+phone,Toast.LENGTH_LONG).show();
+                    /*getSharedPreferences("atm", MODE_PRIVATE)
+                            .edit()
+                            .putString("NAME", nickname)
+                            .putString("PHONE", phone)
+                            .apply();
+*/
             }
-
+                else{
+                    finish();
+                }
            break;
 
 
